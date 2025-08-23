@@ -1,4 +1,3 @@
-```markdown
 # Framework 13 Arch Linux Setup
 
 This repository contains backup of my `.config` directory and a setup script to quickly configure a fresh Arch Linux install on my Framework 13 laptop running EndeavourOS with XFCE.
@@ -45,4 +44,3 @@ This repository contains backup of my `.config` directory and a setup script to 
 ---
 
 *Maintained by 0x4B*
-```
