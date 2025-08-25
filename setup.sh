@@ -53,7 +53,7 @@ install_packages() {
 }
 
 # Install essential packages needed for setup and daily use
-install_packages chromium discord docker lolcat obsidian qFlipper rpi-imager stow tree yay
+install_packages bat chromium discord docker fzf htop lolcat obsidian qFlipper rpi-imager starship stow tree yay
 
 # BlackArch repo installation if not already present
 if ! grep -q "^blackarch" /etc/pacman.conf 2>/dev/null; then
