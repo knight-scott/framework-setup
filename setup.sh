@@ -15,16 +15,16 @@ DOTFILES_DIR="$HOME/.dotfiles"
 
 # Clone dotfiles repo if missing
 if [[ ! -d "$DOTFILES_DIR" ]]; then
-    color_echo "$CYAN" "Cloning dotfiles repo..."
+    echo "Cloning dotfiles repo..."
     git clone "https://github.com/$REPO_USER/$DOTFILES_REPO.git" "$DOTFILES_DIR"
 else
     # Update dotfiles if present
-    color_echo "$CYAN" "Updating dotfiles repo..."
+    echo "Updating dotfiles repo..."
     git -C "$DOTFILES_DIR" pull --rebase
 fi
 
 # === Run Dotfiles Installer ===
-color_echo "$CYAN" "Running dotfiles install script..."
+echo "Running dotfiles install script..."
 bash "$HOME/.dotfiles/install.sh"
 
 # Source shared function
