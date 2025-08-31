@@ -28,7 +28,7 @@ echo "Running dotfiles install script..."
 bash "$HOME/.dotfiles/install.sh"
 
 # Source shared function
-source=DOTFILES_DIR/lib.sh
+source "DOTFILES_DIR/lib.sh"
 trap 'error_handler ${LINENO} $?' ERR
 
 # == TODO ==
