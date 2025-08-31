@@ -13,6 +13,20 @@ SETUP_REPO="framework-setup" # Repo name containing backups & scripts
 RELEASE_TAG="v1.0"          # Release tag version
 DOTFILES_DIR="$HOME/.dotfiles"
 
+# Clone dotfiles repo if missing
+if [[ ! -d "$DOTFILES_DIR" ]]; then
+    color_echo "$CYAN" "Cloning dotfiles repo..."
+    git clone "https://github.com/$REPO_USER/$DOTFILES_REPO.git" "$DOTFILES_DIR"
+else
+    # Update dotfiles if present
+    color_echo "$CYAN" "Updating dotfiles repo..."
+    git -C "$DOTFILES_DIR" pull --rebase
+fi
+
+# === Run Dotfiles Installer ===
+color_echo "$CYAN" "Running dotfiles install script..."
+bash "$HOME/.dotfiles/install.sh"
+
 # Source shared function
 source "$(dirname "$0")/lib.sh"
 trap 'error_handler ${LINENO} $?' ERR
@@ -79,20 +93,6 @@ add_user_to_group() {
         sudo usermod -aG "$group" "$USER"
     fi
 }
-
-# Clone dotfiles repo if missing
-if [[ ! -d "$DOTFILES_DIR" ]]; then
-    color_echo "$CYAN" "Cloning dotfiles repo..."
-    git clone "https://github.com/$REPO_USER/$DOTFILES_REPO.git" "$DOTFILES_DIR"
-else
-    # Update dotfiles if present
-    color_echo "$CYAN" "Updating dotfiles repo..."
-    git -C "$DOTFILES_DIR" pull --rebase
-fi
-
-# === Run Dotfiles Installer ===
-color_echo "$CYAN" "Running dotfiles install script..."
-bash "$HOME/.dotfiles/install.sh"
 
 # === TODO ===
 # blackman install and use for install of haxx tools
