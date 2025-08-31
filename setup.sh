@@ -46,6 +46,25 @@ install_packages() {
     fi
 }
 
+# Installs missing BlackArch packages from a list using blackman
+install_blackarch() {
+    local pkgs=("$@")
+    local missing=()
+    
+    for pkg in "${pkgs[@]}"; do
+        if ! command -v "$pkg" &> /dev/null; then
+            missing+=("$pkg")
+        fi
+    done
+    
+    if (( ${#missing[@]} )); then
+        color_echo "$CYAN" "Installing missing BlackArch packages: ${missing[*]}"
+        blackman -i "${missing[@]}"
+    else
+        color_echo "$GREEN" "All required BlackArch packages already installed."
+    fi
+}
+
 add_user_to_group() {
     local group=$1
     if ! getent group "$group" > /dev/null; then
@@ -75,6 +94,11 @@ fi
 color_echo "$CYAN" "Running dotfiles install script..."
 bash "$HOME/.dotfiles/install.sh"
 
+# === TODO ===
+# blackman install and use for install of haxx tools
+# make list of hacking tools
+# make reference list of tools using obsidian field manual
+
 # === BlackArch Repo ===
 # BlackArch repo installation if not already present
 if ! grep -q "^blackarch" /etc/pacman.conf 2>/dev/null; then
@@ -88,16 +112,18 @@ else
     color_echo "$YELLOW" "BlackArch repo already installed; skipping."
 fi
 
-# === TODO ===
-# blackman install and use for install of haxx tools
-# make list of hacking tools
-# make reference list of tools using obsidian field manual
-
 # Update group membership:
 add_user_to_group dialout
 
 # Install essential packages needed for setup and daily use
-install_packages bat chromium discord docker fzf htop lolcat obsidian qFlipper rpi-imager starship tree wireshark burpsuite
+install_packages bat blackman chromium discord docker fzf htop lolcat nmap obsidian python python-pip qFlipper rpi-imager starship tree wireshark
+
+# Blackman install list
+install_blackarch burpsuite
+
+# === TODO ===
+# Blackman tools that do not work and have to be installed differently
+# ducktoolskit
 
 # Synchronize package lists and upgrade system
 color_echo "$CYAN" "Synchronizing package databases and upgrading system packages..."
