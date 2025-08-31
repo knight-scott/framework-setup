@@ -36,7 +36,7 @@ trap 'error_handler ${LINENO} $?' ERR
 # designed for Arch/pacman currently
 
 # Ensure basic tools
-sudo pacman -S --nonconfirm --needed git base-devel wget curl stow yay
+sudo pacman -S --noconfirm --needed git base-devel wget curl stow yay
 
 # === FUNCTIONS ===
 
