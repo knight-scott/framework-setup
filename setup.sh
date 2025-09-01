@@ -116,7 +116,7 @@ fi
 add_user_to_group dialout
 
 # Install essential packages needed for setup and daily use
-install_packages bat blackman chromium discord docker fzf htop lolcat nmap obsidian python python-pip qFlipper rpi-imager starship tree wireshark
+install_packages bat blackman chromium discord docker fzf htop lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager starship tree vim wireshark
 
 # Blackman install list
 install_blackarch burpsuite
@@ -124,6 +124,7 @@ install_blackarch burpsuite
 # === TODO ===
 # Blackman tools that do not work and have to be installed differently
 # ducktoolskit
+# CyberChef - offline
 
 # Synchronize package lists and upgrade system
 color_echo "$CYAN" "Synchronizing package databases and upgrading system packages..."
