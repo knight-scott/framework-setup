@@ -4,7 +4,6 @@ This repository contains backup of my `.config` directory and a setup script to 
 
 ## What’s Inside
 
-- `config-backup.tar.gz` — backup of my entire `.config` directory including XFCE, Thunar, GTK, and other configs.
 - `setup.sh` — a script to automate loading the backup, installing necessary tools, enabling BlackArch repo, and applying tweaks.
 
 ## Usage
@@ -21,12 +20,15 @@ This repository contains backup of my `.config` directory and a setup script to 
    ```
 
    The script will:
-   - Restore your `.config` settings from the backup archive.
+   - Restore your `.dotfiles`
    - Install essential tools if not found.
    - Enable BlackArch repo.
-   - Apply other personal tweaks.
+   - Apply other personal tweaks.S
 
 ## Updating Your Setup
+ 
+!!! note
+   TODO: fix .config reference
 
 - After making config changes or tweaking your setup, create a new backup of `.config`:
   ```
