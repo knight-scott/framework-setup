@@ -13,6 +13,9 @@ SETUP_REPO="framework-setup" # Repo name containing backups & scripts
 RELEASE_TAG="v1.0"          # Release tag version
 DOTFILES_DIR="$HOME/.dotfiles"
 
+# Ensure basic tools
+sudo pacman -S --noconfirm --needed git base-devel wget curl stow yay
+
 # Clone dotfiles repo if missing
 if [[ ! -d "$DOTFILES_DIR" ]]; then
     echo "Cloning dotfiles repo..."
@@ -34,9 +37,6 @@ trap 'error_handler ${LINENO} $?' ERR
 # == TODO ==
 # Add check for package manager
 # designed for Arch/pacman currently
-
-# Ensure basic tools
-sudo pacman -S --noconfirm --needed git base-devel wget curl stow yay
 
 # === FUNCTIONS ===
 
@@ -94,8 +94,44 @@ add_user_to_group() {
     fi
 }
 
+# Cyber Chef install
+install_cyberchef() {
+    local tools_dir="$HOME/tools"
+    local chef_dir="$tools_dir/cyberchef"
+    
+    color_echo "$CYAN" "Installing CyberChef..."
+    
+    # Create directories
+    checkdir "$tools_dir"
+    checkdir "$chef_dir"
+    
+    # Get latest version info
+    local latest_version=$(curl -sL https://api.github.com/repos/gchq/CyberChef/releases/latest | jq -r ".tag_name")
+    local download_url=$(curl -sL https://api.github.com/repos/gchq/CyberChef/releases/latest | jq -r ".assets[].browser_download_url")
+    
+    # Check if already installed
+    if [[ -f "$chef_dir/index.html" ]]; then
+        color_echo "$YELLOW" "CyberChef already installed, skipping..."
+        return
+    fi
+    
+    color_echo "$CYAN" "Downloading CyberChef $latest_version..."
+    cd "$HOME/Downloads"
+    wget -q "$download_url"
+    
+    color_echo "$CYAN" "Extracting CyberChef..."
+    rm -rf "$chef_dir"
+    unzip -q "CyberChef_$latest_version.zip" -d "$chef_dir"
+    mv "$chef_dir/CyberChef_$latest_version.html" "$chef_dir/index.html"
+    
+    # Cleanup
+    rm -f "CyberChef_$latest_version.zip"
+    cd "$HOME"
+    
+    color_echo "$GREEN" "CyberChef installed to $chef_dir"
+}
+
 # === TODO ===
-# blackman install and use for install of haxx tools
 # make list of hacking tools
 # make reference list of tools using obsidian field manual
 
@@ -113,17 +149,21 @@ else
 fi
 
 # Update group membership:
-add_user_to_group dialout
+add_user_to_group dialout uucp
 
 # Install essential packages needed for setup and daily use
-install_packages bat blackman chromium discord docker fzf htop lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager starship tree vim wireshark
+install_packages bat blackman chromium discord docker fzf gobuster htop lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager sqlmap starship subfinder tree vim wireshark
 
 # Blackman install list
-install_blackarch burpsuite
+install_blackarch amass burpsuite dirbuster dirstalk
+
+# Install CyberChef
+install_cyberchef
 
 # === TODO ===
 # Blackman tools that do not work and have to be installed differently
 # ducktoolskit
+# special tool install script in .dotfiles > scripts and call here
 # CyberChef - offline
 
 # Synchronize package lists and upgrade system

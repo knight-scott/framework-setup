@@ -63,4 +63,4 @@ Automated setup script to quickly configure a fresh Arch Linux install on my Fra
 - [ ] Add specialized tool installation scripts
 
 ---
-*Maintained by 0x4B*
+*Maintained by 0x4B 
