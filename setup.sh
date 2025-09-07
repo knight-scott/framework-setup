@@ -1,8 +1,7 @@
 #!/bin/bash
-# setup.sh - Bootstraps system setup on a fresh Arch-based install.
-# Downloads and restores config backup, pulls dotfiles repo,
-# installs essential packages, installs BlackArch repo if missing,
-# and synchronizes and upgrades all packages.
+# `setup.sh` — comprehensive setup script that handles dotfiles, packages, repos, and specialized tools
+# Configuration for security research and penetration testing workflows
+# Framework 13 specific optimizations and tweaks
 
 set -euo pipefail
 
@@ -96,7 +95,7 @@ add_user_to_group() {
 
 # Cyber Chef install
 install_cyberchef() {
-    local tools_dir="$HOME/tools"
+    local tools_dir="$HOME/Tools"
     local chef_dir="$tools_dir/cyberchef"
     
     color_echo "$CYAN" "Installing CyberChef..."
@@ -131,6 +130,104 @@ install_cyberchef() {
     color_echo "$GREEN" "CyberChef installed to $chef_dir"
 }
 
+# DuckToolkit install
+install_ducktoolkit() {
+    local tools_dir="$HOME/Tools"
+    local duck_dir="$tools_dir/DuckToolkit"
+    
+    color_echo "$CYAN" "Installing DuckToolkit..."
+    
+    # Create tools directory
+    checkdir "$tools_dir"
+    
+    # Check if already installed
+    if [[ -d "$duck_dir" ]]; then
+        color_echo "$YELLOW" "DuckToolkit already installed, skipping..."
+        return
+    fi
+    
+    # Clone the repository using git
+    color_echo "$CYAN" "Cloning DuckToolkit repository..."
+    cd "$tools_dir"
+    
+    if git clone https://github.com/kevthehermit/DuckToolkit.git; then
+        color_echo "$GREEN" "DuckToolkit installed to $duck_dir"
+
+        # Install DuckToolkit
+        color_echo "$CYAN" "Installing DuckToolkit dependencies..."
+        cd "$duck_dir"
+        sudo python setup.py install
+        
+        color_echo "$GREEN" "DuckToolkit installation complete!"
+    else
+        color_echo "$RED" "Failed to clone DuckToolkit repository"
+        return 1
+    fi
+
+    cd "$HOME"
+}
+
+# Configure LightDM Slick Greeter with custom backgrounds
+configure_lightdm() {
+    local backgrounds_dir="/usr/share/pixmaps/backgrounds"
+    local greeter_conf="/etc/lightdm/slick-greeter.conf"
+    
+    color_echo "$CYAN" "Configuring LightDM Slick Greeter..."
+    
+    # Create backgrounds directory if it doesn't exist
+    sudo mkdir -p "$backgrounds_dir"
+    
+    # Copy custom background images from dotfiles
+    if [[ -d "$DOTFILES_DIR/backgrounds" ]]; then
+        color_echo "$CYAN" "Copying custom background images..."
+        sudo cp -r "$DOTFILES_DIR/backgrounds/"* "$backgrounds_dir/"
+        sudo chmod 644 "$backgrounds_dir"/*
+        color_echo "$GREEN" "Background images copied to $backgrounds_dir"
+    else
+        color_echo "$YELLOW" "No backgrounds directory found in dotfiles, skipping image copy..."
+    fi
+    
+    # Backup existing greeter config
+    backup_if_exists "$greeter_conf"
+    
+    # Copy custom greeter configuration
+    if [[ -f "$DOTFILES_DIR/lightdm/slick-greeter.conf" ]]; then
+        color_echo "$CYAN" "Installing custom slick-greeter configuration..."
+        sudo cp "$DOTFILES_DIR/lightdm/slick-greeter.conf" "$greeter_conf"
+        color_echo "$GREEN" "Slick greeter configuration installed"
+    else
+        # Create a basic configuration if no custom config exists
+        color_echo "$CYAN" "Creating default slick-greeter configuration..."
+        sudo tee "$greeter_conf" > /dev/null << EOF
+[Greeter]
+# Background image
+background=$backgrounds_dir/desktop-wallpaper.png
+# Optional: Enable user background selection
+draw-user-backgrounds=false
+draw-grid=true
+# Theme settings
+theme-name=Arc-dark
+icon-theme-name=Qogir
+cursor-theme-name=Qogir
+cursor-theme-size=16
+# Other Settings
+show-a11y=false
+show-power=false
+background-color=#000000
+show-clock=true
+clock-format=%H:%M
+EOF
+        color_echo "$GREEN" "Default slick greeter configuration created"
+    fi
+    
+    # Set proper permissions
+    sudo chown root:root "$greeter_conf"
+    sudo chmod 644 "$greeter_conf"
+    
+    color_echo "$GREEN" "LightDM Slick Greeter configuration complete!"
+    color_echo "$YELLOW" "Note: Changes will take effect on next logout/reboot"
+}
+
 # === TODO ===
 # make list of hacking tools
 # make reference list of tools using obsidian field manual
@@ -149,22 +246,27 @@ else
 fi
 
 # Update group membership:
-add_user_to_group dialout uucp
+# use dialout if not in Arch
+add_user_to_group uucp
+
+# Configure LightDM Slick Greeter with custom backgrounds
+configure_lightdm
 
 # Install essential packages needed for setup and daily use
-install_packages bat blackman chromium discord docker fzf gobuster htop lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager sqlmap starship subfinder tree vim wireshark
+install_packages android-sdk bat blackman chromium discord docker fzf github-cli gobuster htop lightdm lightdm-slick-greeter lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager sqlmap starship subfinder tree vim wireshark
 
 # Blackman install list
-install_blackarch amass burpsuite dirbuster dirstalk
+install_blackarch airoscript amass android-sdk-platform-tools burpsuite cewl cloud-enum dirbuster dirstalk enum4linux ffuf seclists sliver 
 
 # Install CyberChef
 install_cyberchef
 
+# Install DuckToolkit
+install_ducktoolkit
+
 # === TODO ===
 # Blackman tools that do not work and have to be installed differently
-# ducktoolskit
 # special tool install script in .dotfiles > scripts and call here
-# CyberChef - offline
 
 # Synchronize package lists and upgrade system
 color_echo "$CYAN" "Synchronizing package databases and upgrading system packages..."

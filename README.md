@@ -58,7 +58,7 @@ Automated setup script to quickly configure a fresh Arch Linux install on my Fra
 ## Planned Improvements
 
 - [ ] Add support for additional package managers
-- [ ] Implement ducktoolskit installation workaround  
+- [ x ] Implement ducktoolskit installation workaround  
 - [ ] Create Obsidian field manual tool reference
 - [ ] Add specialized tool installation scripts
 
