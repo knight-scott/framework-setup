@@ -167,6 +167,40 @@ install_ducktoolkit() {
     cd "$HOME"
 }
 
+# Install AWS CLI v2
+install_awscli() {
+    color_echo "$CYAN" "Installing AWS CLI v2..."
+    
+    # Check if AWS CLI is already installed
+    if command -v aws &> /dev/null; then
+        local current_version=$(aws --version 2>&1 | cut -d/ -f2 | cut -d' ' -f1)
+        color_echo "$YELLOW" "AWS CLI already installed (version: $current_version), skipping..."
+        return
+    fi
+    
+    color_echo "$CYAN" "Downloading AWS CLI v2..."
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    
+    color_echo "$CYAN" "Extracting AWS CLI..."
+    unzip awscliv2.zip
+    
+    color_echo "$CYAN" "Installing AWS CLI..."
+    sudo ./aws/install
+    
+    # Cleanup
+    rm -f awscliv2.zip
+    rm -rf aws/
+    
+    # Verify installation
+    if command -v aws &> /dev/null; then
+        local installed_version=$(aws --version 2>&1 | cut -d/ -f2 | cut -d' ' -f1)
+        color_echo "$GREEN" "AWS CLI v$installed_version installed successfully"
+    else
+        color_echo "$RED" "AWS CLI installation failed"
+        return 1
+    fi
+}
+
 # Configure LightDM Slick Greeter with custom backgrounds
 configure_lightdm() {
     local backgrounds_dir="/usr/share/pixmaps/backgrounds"
@@ -228,6 +262,8 @@ EOF
     color_echo "$YELLOW" "Note: Changes will take effect on next logout/reboot"
 }
 
+
+
 # === TODO ===
 # make list of hacking tools
 # make reference list of tools using obsidian field manual
@@ -263,6 +299,9 @@ install_cyberchef
 
 # Install DuckToolkit
 install_ducktoolkit
+
+# Install AWS CLI v.2
+install_awscli
 
 # === TODO ===
 # Blackman tools that do not work and have to be installed differently
