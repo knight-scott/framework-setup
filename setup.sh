@@ -289,7 +289,7 @@ add_user_to_group uucp
 configure_lightdm
 
 # Install essential packages needed for setup and daily use
-install_packages android-sdk bat blackman chromium discord docker fzf github-cli gobuster htop lightdm lightdm-slick-greeter lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager sqlmap starship subfinder tree vim wireshark
+install_packages android-sdk bat bitwarden blackman chromium discord docker fzf github-cli gobuster htop lightdm lightdm-slick-greeter lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager sqlmap starship subfinder tree vim wireshark
 
 # Blackman install list
 install_blackarch airoscript amass android-sdk-platform-tools burpsuite cewl cloud-enum dirbuster dirstalk enum4linux ffuf seclists sliver 
