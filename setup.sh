@@ -262,8 +262,6 @@ EOF
     color_echo "$YELLOW" "Note: Changes will take effect on next logout/reboot"
 }
 
-
-
 # === TODO ===
 # make list of hacking tools
 # make reference list of tools using obsidian field manual
@@ -289,7 +287,7 @@ add_user_to_group uucp
 configure_lightdm
 
 # Install essential packages needed for setup and daily use
-install_packages android-sdk bat bitwarden blackman chromium discord docker fzf github-cli gobuster htop lightdm lightdm-slick-greeter lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager sqlmap starship subfinder tree vim wireshark
+install_packages android-sdk bat bitwarden blackman chromium discord docker fzf github-cli gobuster htop lightdm lightdm-slick-greeter lolcat nmap obsidian protonvpn-app python python-pip qFlipper rpi-imager sqlmap starship subfinder terraform tree vim wireshark
 
 # Blackman install list
 install_blackarch airoscript amass android-sdk-platform-tools burpsuite cewl cloud-enum dirbuster dirstalk enum4linux ffuf seclists sliver 
@@ -304,7 +302,7 @@ install_ducktoolkit
 install_awscli
 
 # === TODO ===
-# Blackman tools that do not work and have to be installed differently
+# Blackman tools that do not work or security tools not in BlackArch and have to be installed differently
 # special tool install script in .dotfiles > scripts and call here
 
 # Synchronize package lists and upgrade system
