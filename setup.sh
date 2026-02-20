@@ -13,7 +13,7 @@ RELEASE_TAG="v1.0"          # Release tag version
 DOTFILES_DIR="$HOME/.dotfiles"
 
 # Ensure basic tools
-sudo pacman -S --noconfirm --needed git base-devel wget curl stow yay
+sudo pacman -S --noconfirm --needed git base-devel wget curl stow yay meld
 
 # Clone dotfiles repo if missing
 if [[ ! -d "$DOTFILES_DIR" ]]; then
@@ -27,10 +27,10 @@ fi
 
 # === Run Dotfiles Installer ===
 echo "Running dotfiles install script..."
-bash "$HOME/.dotfiles/install.sh"
+bash "$HOME/.dotfiles/scripts/install.sh"
 
 # Source shared function
-source "$DOTFILES_DIR/lib.sh"
+source "$DOTFILES_DIR/scripts/lib.sh"
 trap 'error_handler ${LINENO} $?' ERR
 
 # == TODO ==
@@ -284,10 +284,10 @@ fi
 add_user_to_group uucp
 
 # Configure LightDM Slick Greeter with custom backgrounds
-configure_lightdm
+#configure_lightdm
 
 # Install essential packages needed for setup and daily use
-install_packages android-sdk bat bitwarden blackman chromium code docker fzf github-cli gobuster htop hydra jq lightdm lightdm-slick-greeter lolcat nmap obsidian python python-pip qFlipper rpi-imager sqlmap starship subfinder terraform tree vim wireshark
+install_packages android-sdk bat bitwarden blackman brave code docker fastfetch fzf github-cli gobuster htop hydra jq lightdm lightdm-slick-greeter lolcat nmap neovim obsidian python python-pip qFlipper rpi-imager sqlmap starship subfinder terraform tree wireshark
 
 # Blackman install list
 install_blackarch airoscript amass android-sdk-platform-tools burpsuite cewl cloud-enum dirbuster dirstalk enum4linux ffuf seclists sliver 
